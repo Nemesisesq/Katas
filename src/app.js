@@ -9,28 +9,62 @@ function isOperator(char) {
 
 }
 
+function isParenthetical(char) {
+    var reg = /[()]/;
+    return !!reg.exec(char);
+}
 
+function isANumber(char){
+    var reg = /\d/;
+    return !!reg.exec(char);
+}
+
+function isDecimal(char){
+    var reg = /\./;
+    return !!reg.exec(char);
+}
 var stringtolist = function (dirtyExpression) {
     // evaluate `expression` and return result
     var stagedOperand = "";
     var collectionList = [];
 
-    var expression = dirtyExpression.replace(" ", "");
+    var dirtyList = dirtyExpression.split('');
+
+    var cleanedList = dirtyList.filter(function (char) {
+        return /\S/.test(char);
+    });
+    var expression = cleanedList.join('');
 
     for (var i = 0; i < expression.length; i++) {
-        if (parseInt(expression[i]) || expression[i] === "0" || expression[i] === ".") {
+        if (isANumber(expression[i]) || isDecimal(expression[i])) {
             stagedOperand += expression[i];
 
         } else {
-            collectionList.push(stagedOperand);
-            stagedOperand = "";
+
+            if (stagedOperand) {
+                collectionList.push(stagedOperand);
+                stagedOperand = "";
+            }
+
         }
 
         if (isOperator(expression[i])) {
             collectionList.push(expression[i]);
         }
+
+        if (isParenthetical(expression[i])) {
+
+            collectionList.push(expression[i]);
+        }
     }
     collectionList.push(stagedOperand);
+
+    var dot = collectionList.indexOf('.');
+
+    if (dot !== -1) {
+        collectionList.splice(dot, 1);
+    }
+
 
     return collectionList.filter(function (str) {
         return /\S/.test(str);
@@ -84,23 +118,45 @@ function smoothOperator(op1, op2, operator) {
 
 function multiplicationListReducer(dirtyList) {
     var list = dirtyList;
-    for(var i = 0; i < list.length; i++){
-        if(isOperator(list[i]) && (list[i]) === '*' || list[i] === '/'){
-            var op1  = list[i - 1];
-            var op2  = list[i + 1];
+    for (var i = 0; i < list.length; i++) {
+        if (isOperator(list[i]) && (list[i]) === '*' || list[i] === '/') {
+
+            var op1, op2;
+
+            if (list[i - 1].search(".") !== 0) {
+
+                op1 = parseFloat(list[i - 1]);
+            } else {
+                op1 = parseInt(list[i - 1]);
+            }
+
+
+            if (list[i + 1].search(/\./)) {
+
+                op2 = parseFloat(list[i + 1]);
+            } else {
+                op2 = parseInt(list[i + 1]);
+            }
+
 
             var result = smoothOperator(op1, op2, list[i]);
-            list[i -1] = result.toString();
+            list[i - 1] = result.toString();
 
-            list.splice(i,2);
+            list.splice(i, 2);
         }
     }
     return list;
 }
 
+function parenthesesListReducer(dirtyList){
+    var string = dirtyList.join('');
+    var reg =/\([]/;
+}
+
 
 function listToNumber(dirtylist) {
     var list = doubleOperatorListCleaner(dirtylist);
+    list = multiplicationListReducer(list);
     var op1 = '';
     var op2 = '';
     var operator = '';
@@ -114,7 +170,7 @@ function listToNumber(dirtylist) {
 
         if (op1) {
             if (parseInt(list[i])) {
-                op2 = parseInt(list[i]);
+                op2 = parseFloat(list[i]);
             } else if (isOperator(list[i])) {
                 operator = list[i];
             }
@@ -144,7 +200,8 @@ function listToNumber(dirtylist) {
 }
 
 doubleOperatorListCleaner(['2', '-', '-', '2']);
+//var ty = stringtolist('10+10+3+4+5+6+7+8+9+1');
 var x = stringtolist('2 /2+3 * 4.75- -6');
 listToNumber(x);
 
-multiplicationListReducer(['2','+','2','*','8']);
+multiplicationListReducer(['2', '+', '2', '*', '8']);
