@@ -1,4 +1,4 @@
-describe('test my test', function() {
+/* describe('test my test', function() {
   it('says hello world', function() {
     expect(test()).toBe('Hello, World');
   });
@@ -103,7 +103,7 @@ describe('list cleaner', function() {
 
 describe('parentheses operations', function() {
   it('picks expressions inside of parentheses', function() {
-    expect(parenthesesListReducer(['1', '(', '1', '+', '2', ')', '1'])).toEqual('1+2');
+    expect(parenthesesListReducer(['1', '(', '1', '+', '2', ')', '1'])).toEqual(['1','3','1']);
   });
 });
 
@@ -125,4 +125,4 @@ describe('order operations', function() {
     var testList = stringtolist('2 * (4 + 5) + 4 + (10 * 5) - 40');
     expect(parenthesesListReducer(testList)).toEqual(32);
   });
-});
+}); */
