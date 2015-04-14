@@ -19,7 +19,7 @@ Interpreter.prototype.input = function (expr)
 {
     var tokens = this.tokenize(expr);
 
-    if(/\w/g.test(tokens)){
+    if(/[^\d+-/*%\s]/g.test(tokens)){
         this.sortVarsFunc(tokens)
     } else {
         return this.calc(tokens.join(''));
@@ -29,6 +29,7 @@ Interpreter.prototype.input = function (expr)
 Interpreter.prototype.doOperation = function (op1, op2, op3){
 
 };
+
 
 Interpreter.prototype.sortVarsFunc = function(tokens) {
 
