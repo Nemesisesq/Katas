@@ -1,4 +1,4 @@
-function test() {
+/*function test() {
     return "Hello, World";
 }
 
@@ -228,3 +228,5 @@ var x = stringtolist('2 /2+3 * 4.75- -6');
 listToNumber(x);
 
 multiplicationListReducer(['2', '+', '2', '*', '8']);
+
+    */
