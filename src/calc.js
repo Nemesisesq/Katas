@@ -18,7 +18,7 @@ var calcObj = {
     },
 
     parenCleaner: function (str) {
-        var reg = /\([^\(\)]+\)+/;
+        var reg = /\([^\(\)]+\)/;
         var result;
         var dirtyEq;
         var count = 0;
@@ -44,6 +44,8 @@ var calcObj = {
 
                 dirtyEq = parentheticals[i].replace(/[()]/g, '');
 
+                dirtyEq = this.doubleOperatorCleaner(dirtyEq);
+
                 result = this.doCalculation(dirtyEq);
 
                 //result = listToNumber(eq);
@@ -55,6 +57,7 @@ var calcObj = {
         }
 
         return str;
+
     },
 
     doCalculation: function (equation) {
@@ -97,13 +100,13 @@ var calcObj = {
 
                 //do the regular parsing
                 var op3, op4;
-                if (list[i - 1].search(/\./) >= 1) {
+                if (/\./.test(list[i - 1])) {
                     op3 = parseFloat(list[i - 1]);
                 } else {
                     op3 = parseInt(list[i - 1]);
                 }
 
-                if (list[i + 1].search(/\./) >= 1) {
+                if (/\./.test(list[i + 1])) {
 
                     op4 = parseFloat(list[i + 1]);
                 } else {
@@ -132,15 +135,15 @@ var calcObj = {
 
                 var op1, op2;
 
-                if (list[i - 1].search(/\./) >= 1) {
+                if (/\./.test(list[i - 1])) {
 
                     op1 = parseFloat(list[i - 1]);
                 } else {
                     op1 = parseInt(list[i - 1]);
                 }
 
-                var x = list[i + 1].search(/\./);
-                if (list[i + 1].search(/\./) >= 1) {
+
+                if (/\./.test(list[i + 1])) {
 
                     op2 = parseFloat(list[i + 1]);
                 } else {
@@ -230,9 +233,14 @@ var calcObj = {
 
             }
 
+
             if (this.isOperator(expression[i]) &&
                 ((calcObj.isANumber(expression[i - 1]) && calcObj.isANumber(expression[i + 1])) || calcObj.isOperator(expression[i + 1]))) {
-                collectionList.push(expression[i]);
+
+                if (!this.isDecimal(expression[i])) {
+
+                    collectionList.push(expression[i]);
+                }
             }
 
             if (this.isParenthetical(expression[i])) {
@@ -296,3 +304,4 @@ var calc = function (expression) {
 
     }
 };
+

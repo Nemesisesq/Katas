@@ -1,6 +1,6 @@
 /**
  * Created by Nem on 4/11/15.
- */
+
 
 describe('test my test', function () {
     it('says hello world', function () {
@@ -66,11 +66,15 @@ describe('addition and subtraction', function () {
 describe('srting to list',function(){
    it('takes in a string with numbers and operators and returns the correct list', function(){
        expect(calcObj.stringtolist('-1 + 2')).toEqual(['-1','+','2']);
+       expect(calcObj.stringtolist('-2.5+ 11.5')).toEqual(['-2.5','+','11.5']);
    });
 });
 describe('stringCalculator', function () {
     it('should take in an equation string and return a result', function () {
         var tests = [
+            [ "(123.45*(678.90 / (-2.5+ 11.5)-(((80 -(19))) *33.25)) / 20) - (123.45*(678.90 / (-2.5+ 11.5)-(((80 -(19))) *33.25)) / 20) + (13 - 2)/ -(-11) ", 1],
+            [ "(1 - 2) + -(-(-(-4)))", 3 ],
+            ['2 /2+3 * 4.75- -6', 21.25],
             [ "((80 - (19)))", 61],
             [ "12* 123/-(-5 + 2)", 492],
             ['12*-1', -12],
@@ -80,11 +84,8 @@ describe('stringCalculator', function () {
             ['1 /1', 1],
             ['-123', -123],
             ['123', 123],
-            ['2 /2+3 * 4.75- -6', 21.25],
             ['12* 123', 1476],
             ['2 / (2 + 3) * 4.33 - -6', 7.732]
-
-
         ];
 
         tests.forEach(function (m) {
@@ -93,3 +94,4 @@ describe('stringCalculator', function () {
 
     });
 });
+ */
